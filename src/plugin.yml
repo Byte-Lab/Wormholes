@@ -1,0 +1,5 @@
+main: io.github.bytelab.wormholes.main
+version: 1.0
+name: Wormholes
+description: >
+             Plugin for a fancier form of teleportation!
