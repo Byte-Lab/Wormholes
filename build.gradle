@@ -1,0 +1,76 @@
+buildscript {
+        repositories {
+            jcenter()
+        }
+        dependencies {
+            classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.10.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'license'
+
+defaultTasks 'licenseFormat', 'build'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+group = 'pw.bytelab'
+archivesBaseName = 'wormholes'
+version = '1.0'
+
+ext.buildNumber = project.hasProperty("buildNumber") ? '#' + buildNumber : 'SNAPSHOT'
+ext.ciSystem = project.hasProperty("ciSystem") ? ciSystem : 'unknown'
+ext.commit = project.hasProperty("commit") ? commit : 'unknown'
+
+//Manifest information
+jar.manifest.mainAttributes(
+	"Built-By": System.properties['user.name'],
+	"Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
+	"Implementation-Title": projectName,
+	"Implementation-Version": version + "-ci." + ciSystem + "-" + buildNumber + " (commit." + commit + ")",
+	"Implementation-Vendor": url
+)
+
+repositories {
+    mavenCentral()
+	maven {
+		url 'http://repo.bukkit.org/content/groups/public/'
+	}
+}
+
+dependencies {
+	compile group: 'org.bukkit', name: 'bukkit', version: '1.7.9-R0.2'
+}
+
+configure([compileJava, compileTestJava]) {
+	options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
+	options.deprecation = true
+	options.encoding = 'utf8'
+}
+
+processResources {
+
+	from 'LICENSE'
+}
+
+license {
+	ext.name = project.name
+	ext.organization = project.organization
+	ext.url = project.url
+	ext.inceptionYear = project.inceptionYear
+	ext.currentYear = Calendar.getInstance().get(Calendar.YEAR)
+	
+	exclude "**/*.info"
+
+    header rootProject.file('HEADER.txt')
+    skipExistingHeaders true
+    ignoreFailures false
+    strictCheck true
+	sourceSets = project.sourceSets
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+    }
+}
