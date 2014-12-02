@@ -1,4 +1,4 @@
-package io.github.bytelab.wormholes;
+package main.java.io.github.bytelab.wormholes;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
