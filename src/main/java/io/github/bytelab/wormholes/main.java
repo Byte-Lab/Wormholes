@@ -1,6 +1,6 @@
-<<<<<<< HEAD
+
 package main.java.io.github.bytelab.wormholes;
-=======
+
 /*
  * Copyright (c) '2014'-2014
  * 'Byte-Lab' <'http://bytelab.pw'>
@@ -20,8 +20,6 @@ package main.java.io.github.bytelab.wormholes;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.bytelab.wormholes;
->>>>>>> origin/master
 
 import org.bukkit.plugin.java.JavaPlugin;
 
