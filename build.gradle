@@ -53,7 +53,7 @@ configure([compileJava, compileTestJava]) {
 
 processResources {
 
-	from 'LICENSE'
+	from 'LICENSE.txt'
 }
 
 license {
