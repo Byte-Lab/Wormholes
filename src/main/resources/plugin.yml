@@ -3,3 +3,6 @@ version: 1.0
 name: Wormholes
 description: >
              Plugin for a fancier form of teleportation!
+commands:
+  wh:
+    description: Base command for Wormholes
