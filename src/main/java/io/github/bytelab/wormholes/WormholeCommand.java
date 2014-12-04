@@ -52,7 +52,7 @@ public class WormholeCommand implements CommandExecutor {
     }
 
     private boolean onCreateCommand(Player sender, String[] args) throws InsuficientPermissionException {
-        if (! sender.hasPermission(new Permission("wh.create"))) { throw new InsuficientPermissionException(); }
+        if (! sender.hasPermission(new Permission("wh.create")) && ! sender.isOp()) { throw new InsuficientPermissionException(); }
         //assuming args: <name> <destX> <destY> <destZ>
         Vector position = new Vector(
           sender.getLocation().getX(),
@@ -67,6 +67,8 @@ public class WormholeCommand implements CommandExecutor {
             Double.parseDouble(args[4])
           )
         );
+
+        //TODO: Allow for named coordinates & tracked targets.
 
         WormholeManager.wormholes.add(new Wormhole(position, sender.getWorld(), args[1], destination));
 

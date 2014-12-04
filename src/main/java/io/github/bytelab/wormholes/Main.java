@@ -44,20 +44,22 @@ public class Main extends JavaPlugin {
         return instance;
     }
 
-    public void onDisable() {
+    public void onEnable() {
+        pluginConfiguration();
+
         instance = this;
 
         WormholeManager.init();
 
-        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
-    }
-
-    public void onEnable() {
-        pluginConfiguration();
-
         getCommand("wh").setExecutor(new WormholeCommand());
+        getCommand("wormhole").setExecutor(new WormholeCommand());
 
         logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
+    }
+
+    public void onDisable() {
+
+        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
     }
 
     public void pluginConfiguration() {
