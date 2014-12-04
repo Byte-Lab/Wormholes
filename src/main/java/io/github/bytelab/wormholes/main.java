@@ -32,6 +32,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 public class main extends JavaPlugin{
@@ -39,17 +40,20 @@ public class main extends JavaPlugin{
     PluginDescriptionFile pdf = this.getDescription();
     Logger logger = Logger.getLogger("Minecraft");
 
+    Object object = null;
+    File file = null;
+
     public void onEnable()
     {
         pluginConfiguration();
 
         getCommand("wh").setExecutor(new wormholeCommands());
 
-        logger.info("§b " + pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
+        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
     }
     public void onDisable()
     {
-        logger.info("§c " + pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
+        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
     }
     public void pluginConfiguration()
     {
@@ -62,5 +66,13 @@ public class main extends JavaPlugin{
 
         config.options().copyDefaults(true);
         saveConfig();
+    }
+    public void saveFile()
+    {
+        fileManager.save(object, file);
+    }
+    public void loadFile()
+    {
+        fileManager.load(file);
     }
 }

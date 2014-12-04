@@ -44,26 +44,38 @@ public class wormholeCommands implements CommandExecutor{
 
         player = (Player) sender;
 
-        if(commandLabel.equalsIgnoreCase("wormhole") || commandLabel.equalsIgnoreCase("wh")){
-            if(args.length > 0){
+        if(commandLabel.equalsIgnoreCase("wormhole") || commandLabel.equalsIgnoreCase("wh"))
+        {
+            if(args.length > 0)
+            {
 
-                if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c")){
-                    if(sender instanceof Player){
-                        if(sender.hasPermission("wormholes.create")){
-                            if(args.length == 2){
+                if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c"))
+                {
+                    if(sender instanceof Player)
+                    {
+                        if(sender.hasPermission("wormholes.create"))
+                        {
+                            if(args.length == 2)
+                            {
                                 wormholeName = args[1];
                                 playerPosition = player.getLocation().toVector();
                                 world = player.getWorld();
 
                                 wormholeCreate.create();
                                 sender.sendMessage(prefix + creation);
-                            }else{
+                            }
+                            else
+                            {
                                 sender.sendMessage(prefix + "§a/wormhole create §b<§aname§b>");
                             }
-                        }else{
+                        }
+                        else
+                        {
                             sender.sendMessage(noPermission);
                         }
-                    }else{
+                    }
+                    else
+                    {
                         sender.sendMessage(illegalConsoleSender);
                     }
                 } //Remove a registered wormhole

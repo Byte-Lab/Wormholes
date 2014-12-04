@@ -21,7 +21,6 @@
 package main.java.io.github.bytelab.wormholes;
 
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class wormholeCreate extends wormholeCommands{
