@@ -26,47 +26,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.*;
 import java.util.logging.Logger;
 
-public class FileManager extends main{
+public class FileManager extends Main{
 
     static Logger logger = Logger.getLogger("Minecraft");
 
     public File wormholes;
-    public main plugin;
+    public Main plugin;
     public FileConfiguration wormholesConfig;
 
-    static void save(Object object, File file)
-    {
-        try{
-            if(!file.exists())
-            {
-                file.createNewFile();
-            }
-
-            ObjectOutputStream saveFile = new ObjectOutputStream(new FileOutputStream(file));
-                               saveFile.writeObject(object);
-                               saveFile.flush();
-                               saveFile.close();
-        }
-        catch(Exception exception)
-        {
-            logger.info("§cError occurred while saving files!");
-        }
-    }
-    static Object load(File file)
-    {
-        try
-        {
-            ObjectInputStream loadFile = new ObjectInputStream(new FileInputStream(file));
-                Object list = loadFile.readObject();
-                              loadFile.close();
-            return list;
-        }
-        catch(Exception exception)
-        {
-            logger.info("§cError occurred while loading files!");
-            return null;
-        }
-    }
     public void loadYML()
     {
         if(this.wormholes == null){

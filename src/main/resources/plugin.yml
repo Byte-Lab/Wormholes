@@ -1,4 +1,4 @@
-main: main.java.io.github.bytelab.wormholes.main
+main: main.java.io.github.bytelab.wormholes.Main
 version: 1.0
 name: Wormholes
 description: >

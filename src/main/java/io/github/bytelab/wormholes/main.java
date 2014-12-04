@@ -35,7 +35,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.logging.Logger;
 
-public class main extends JavaPlugin{
+public class Main extends JavaPlugin{
 
     PluginDescriptionFile pdf = this.getDescription();
     Logger logger = Logger.getLogger("Minecraft");
@@ -69,10 +69,10 @@ public class main extends JavaPlugin{
     }
     public void saveFile()
     {
-        FileManager.save(object, file);
+       // FileManager.save(object, file);
     }
     public void loadFile()
     {
-        FileManager.load(file);
+       // FileManager.load(file);
     }
 }

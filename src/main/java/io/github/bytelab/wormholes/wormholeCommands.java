@@ -30,7 +30,7 @@ import org.bukkit.util.Vector;
 
 public class WormholeCommands implements CommandExecutor{
 
-           FileConfiguration config = main.getPlugin(main.class).getConfig();
+           FileConfiguration config = Main.getPlugin(Main.class).getConfig();
            String noPermission = config.getString("noPermission").replaceAll("&","§");
            String illegalConsoleSender = config.getString("illegalConsoleSender").replaceAll("&","§");
            String prefix = config.getString("prefix").replaceAll("&", "§");
