@@ -26,7 +26,7 @@
  * wormholes.options
  */
 
-package main.java.io.github.bytelab.wormholes;
+package io.github.bytelab.wormholes;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;

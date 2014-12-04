@@ -18,12 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package main.java.io.github.bytelab.wormholes;
+package io.github.bytelab.wormholes;
 
 import java.io.*;
 import java.util.logging.Logger;
 
-public class FileManager extends Main{
+public class FileManager extends Main {
 
     static Logger logger = Logger.getLogger("Minecraft");
 

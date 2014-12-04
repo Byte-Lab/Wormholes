@@ -18,12 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package main.java.io.github.bytelab.wormholes;
+package io.github.bytelab.wormholes;
 
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
-public class WormholeCreate extends WormholeCommands{
+public class WormholeCreate extends WormholeCommands {
 
     String name = WormholeCommands.wormholeName;
     Vector position = WormholeCommands.playerPosition;
