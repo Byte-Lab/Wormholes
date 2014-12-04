@@ -18,8 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package main.java.io.github.bytelab.wormholes;
-
 /*
  * Permissions:
  * wormholes.create
@@ -27,6 +25,8 @@ package main.java.io.github.bytelab.wormholes;
  * wormholes.list
  * wormholes.options
  */
+
+package main.java.io.github.bytelab.wormholes;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -41,9 +41,9 @@ public class main extends JavaPlugin{
 
     public void onEnable()
     {
-        getCommand("wh").setExecutor(new wormholeCommands());
-
         pluginConfiguration();
+
+        getCommand("wh").setExecutor(new wormholeCommands());
 
         logger.info("§b " + pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
     }
@@ -58,6 +58,7 @@ public class main extends JavaPlugin{
         config.addDefault("prefix", "&a[&bWormholes&a] ");
         config.addDefault("noPermission", "&cYou don't have permission to use that command!");
         config.addDefault("illegalConsoleSender", "&cThat command may not be sent from the console!");
+        config.addDefault("wormholeCreation", "&bWormhole has been successfully created!");
 
         config.options().copyDefaults(true);
         saveConfig();

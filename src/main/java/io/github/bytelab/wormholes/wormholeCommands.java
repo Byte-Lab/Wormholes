@@ -20,6 +20,7 @@
 
 package main.java.io.github.bytelab.wormholes;
 
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,61 +34,62 @@ public class wormholeCommands implements CommandExecutor{
            String noPermission = config.getString("noPermission").replaceAll("&","§");
            String illegalConsoleSender = config.getString("illegalConsoleSender").replaceAll("&","§");
            String prefix = config.getString("prefix").replaceAll("&", "§");
+           String creation = config.getString("wormholeCreation").replaceAll("&", "§");
     static Player player;
     static String wormholeName;
     static Vector playerPosition;
+    static World world;
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 
         player = (Player) sender;
 
-        if(commandLabel.equalsIgnoreCase("wh"))
-        {   //Create the wormhole
-            if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c"))
-            {
-                if(sender instanceof Player)
-                {
-                    if(sender.hasPermission("wormholes.create"))
-                    {
-                        if(args.length == 2)
-                        {
-                            wormholeName = args[1];
-                            playerPosition = player.getLocation().toVector();
+        if(commandLabel.equalsIgnoreCase("wormhole") || commandLabel.equalsIgnoreCase("wh")){
+            if(args.length > 0){
 
-                            wormholeCreate.create();
+                if(args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c")){
+                    if(sender instanceof Player){
+                        if(sender.hasPermission("wormholes.create")){
+                            if(args.length == 2){
+                                wormholeName = args[1];
+                                playerPosition = player.getLocation().toVector();
+                                world = player.getWorld();
+
+                                wormholeCreate.create();
+                                sender.sendMessage(prefix + creation);
+                            }else{
+                                sender.sendMessage(prefix + "§a/wormhole create §b<§aname§b>");
+                            }
+                        }else{
+                            sender.sendMessage(noPermission);
                         }
-                        else
-                        {
-                            sender.sendMessage(prefix + "§acreate §b<§aname§b>");
-                        }
+                    }else{
+                        sender.sendMessage(illegalConsoleSender);
                     }
-                    else
-                    {
-                        sender.sendMessage(noPermission);
-                    }
-                }
-                else
-                {
-                    sender.sendMessage(illegalConsoleSender);
-                }
-            } //Remove a registered wormhole
-            else if(args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("r"))
-            {
+                } //Remove a registered wormhole
+                else if(args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("r")){
                 /*
                 Requires 1 argument and doesn't need to be a player sending it
 
                 args[1] must be a registered wormhole in the list
                  */
-            }
-            else if(args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l"))
-            {
+                }else if(args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l")){
                 /*
                 Requires no arguments and doesn't need to be a player
 
                 May later support paginators and use an arg.
                  */
+                } else
+                {
+                    sender.sendMessage("improper command structure!");
+                }
+
+        } else
+            {
+                sender.sendMessage("improper command structure!");
             }
-        }
+
+    }
         return false;
     }
 }
