@@ -21,6 +21,8 @@ group = 'pw.bytelab'
 archivesBaseName = 'wormholes'
 version = '1.0'
 
+
+
 ext.buildNumber = project.hasProperty("buildNumber") ? '#' + buildNumber : 'SNAPSHOT'
 ext.ciSystem = project.hasProperty("ciSystem") ? ciSystem : 'unknown'
 ext.commit = project.hasProperty("commit") ? commit : 'unknown'

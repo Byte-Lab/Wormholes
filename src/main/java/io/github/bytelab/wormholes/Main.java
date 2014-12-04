@@ -32,36 +32,35 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.logging.Logger;
 
-public class Main extends JavaPlugin{
+public class Main extends JavaPlugin {
 
+    private static Main instance;
     PluginDescriptionFile pdf = this.getDescription();
-    Logger logger = Logger.getLogger("Minecraft");
-    public File wormholes;
-   // File file = null;
+    Logger logger = Logger.getLogger("Wormholes");
 
-    public void onEnable()
-    {
+    public static Main getInstance() {
+        return instance;
+    }
+
+    public void onDisable() {
+        instance = this;
+
+        WormholeManager.init();
+
+        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
+    }
+
+    public void onEnable() {
         pluginConfiguration();
 
-        if(wormholes == null)
-        {
-            wormholes = new File(this.getDataFolder(), "wormholes.yml");
-            FileManager.save(wormholes, new File(this.getDataFolder(), "wormholes.yml"));
-        }
-
-        getCommand("wh").setExecutor(new WormholeCommands());
+        getCommand("wh").setExecutor(new WormholeCommand());
 
         logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
     }
-    public void onDisable()
-    {
-        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
-    }
-    public void pluginConfiguration()
-    {
+
+    public void pluginConfiguration() {
         FileConfiguration config = getConfig();
 
         config.addDefault("prefix", "&a[&bWormholes&a] ");
@@ -72,12 +71,12 @@ public class Main extends JavaPlugin{
         config.options().copyDefaults(true);
         saveConfig();
     }
-    public void saveFile()
-    {
-       // FileManager.save(object, file);
+
+    public void saveFile() {
+        //TODO: Save configs and data
     }
-    public void loadFile()
-    {
-       // FileManager.load(file);
+
+    public void loadFile() {
+        //TODO: Load configs and data
     }
 }
