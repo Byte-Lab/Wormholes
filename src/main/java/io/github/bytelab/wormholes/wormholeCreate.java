@@ -23,11 +23,11 @@ package main.java.io.github.bytelab.wormholes;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
 
-public class wormholeCreate extends wormholeCommands{
+public class WormholeCreate extends WormholeCommands{
 
-    String name = wormholeCommands.wormholeName;
-    Vector position = wormholeCommands.playerPosition;
-    World world = wormholeCommands.world;
+    String name = WormholeCommands.wormholeName;
+    Vector position = WormholeCommands.playerPosition;
+    World world = WormholeCommands.world;
 
     static void create()
     {

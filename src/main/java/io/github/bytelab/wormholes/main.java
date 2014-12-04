@@ -47,7 +47,7 @@ public class main extends JavaPlugin{
     {
         pluginConfiguration();
 
-        getCommand("wh").setExecutor(new wormholeCommands());
+        getCommand("wh").setExecutor(new WormholeCommands());
 
         logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
     }
@@ -69,10 +69,10 @@ public class main extends JavaPlugin{
     }
     public void saveFile()
     {
-        fileManager.save(object, file);
+        FileManager.save(object, file);
     }
     public void loadFile()
     {
-        fileManager.load(file);
+        FileManager.load(file);
     }
 }

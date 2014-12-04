@@ -28,7 +28,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class wormholeCommands implements CommandExecutor{
+public class WormholeCommands implements CommandExecutor{
 
            FileConfiguration config = main.getPlugin(main.class).getConfig();
            String noPermission = config.getString("noPermission").replaceAll("&","§");
@@ -61,7 +61,7 @@ public class wormholeCommands implements CommandExecutor{
                                 playerPosition = player.getLocation().toVector();
                                 world = player.getWorld();
 
-                                wormholeCreate.create();
+                                WormholeCreate.create();
                                 sender.sendMessage(prefix + creation);
                             }
                             else
