@@ -40,16 +40,49 @@ package main.java.io.github.bytelab.wormholes;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * Permissions:
+ * wormholes.create
+ * wormholes.remove
+ * wormholes.list
+ * wormholes.options
+ */
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.logging.Logger;
 
 public class main extends JavaPlugin{
 
+    PluginDescriptionFile pdf = this.getDescription();
+    Logger logger = Logger.getLogger("Minecraft");
+
     public void onEnable(){
 
-    }
+        getCommand("wh").setExecutor(new wormholeCommands());
 
+        pluginConfiguration();
+
+        logger.info("§b " + pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
+
+    }
     public void onDisable(){
 
-    }
+        logger.info("§c " + pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
 
+    }
+    public void pluginConfiguration()
+    {
+        FileConfiguration config = getConfig();
+
+        config.addDefault("prefix", "&a[&bWormholes&a] ");
+        config.addDefault("noPermission", "&cYou don't have permission to use that command!");
+        config.addDefault("illegalConsoleSender", "&cThat command may not be sent from the console!");
+
+        config.options().copyDefaults(true);
+        saveConfig();
+
+    }
 }
