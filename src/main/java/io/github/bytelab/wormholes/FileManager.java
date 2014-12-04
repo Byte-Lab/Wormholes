@@ -20,9 +20,6 @@
 
 package main.java.io.github.bytelab.wormholes;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.*;
 import java.util.logging.Logger;
 
@@ -30,17 +27,37 @@ public class FileManager extends Main{
 
     static Logger logger = Logger.getLogger("Minecraft");
 
-    public File wormholes;
-    public Main plugin;
-    public FileConfiguration wormholesConfig;
-
-    public void loadYML()
+    static void save(File config, File file)
     {
-        if(this.wormholes == null){
-            this.wormholes = new File(this.plugin.getDataFolder(), "wormholes.yml");
+        try{
+            if(!file.exists())
+            {
+                file.createNewFile();
+            }
+
+            ObjectOutputStream saveFile = new ObjectOutputStream(new FileOutputStream(file));
+            saveFile.writeObject(config);
+            saveFile.flush();
+            saveFile.close();
         }
-
-        this.wormholesConfig = new YamlConfiguration().loadConfiguration(this.wormholes);
-
+        catch(Exception exception)
+        {
+            logger.info("§cError occurred while saving files!");
+        }
+    }
+    static Object load(File file)
+    {
+        try
+        {
+            ObjectInputStream loadFile = new ObjectInputStream(new FileInputStream(file));
+            Object list = loadFile.readObject();
+            loadFile.close();
+            return list;
+        }
+        catch(Exception exception)
+        {
+            logger.info("§cError occurred while loading files!");
+            return null;
+        }
     }
 }

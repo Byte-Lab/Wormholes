@@ -39,13 +39,18 @@ public class Main extends JavaPlugin{
 
     PluginDescriptionFile pdf = this.getDescription();
     Logger logger = Logger.getLogger("Minecraft");
-
-    Object object = null;
-    File file = null;
+    public File wormholes;
+   // File file = null;
 
     public void onEnable()
     {
         pluginConfiguration();
+
+        if(wormholes == null)
+        {
+            wormholes = new File(this.getDataFolder(), "wormholes.yml");
+            FileManager.save(wormholes, new File(this.getDataFolder(), "wormholes.yml"));
+        }
 
         getCommand("wh").setExecutor(new WormholeCommands());
 
