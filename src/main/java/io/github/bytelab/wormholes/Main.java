@@ -28,10 +28,17 @@
 
 package io.github.bytelab.wormholes;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
@@ -39,6 +46,8 @@ public class Main extends JavaPlugin {
     private static Main instance;
     PluginDescriptionFile pdf = this.getDescription();
     Logger logger = Logger.getLogger("Wormholes");
+    FileConfiguration database;
+    File databaseFile;
 
     public static Main getInstance() {
         return instance;
@@ -72,13 +81,46 @@ public class Main extends JavaPlugin {
 
         config.options().copyDefaults(true);
         saveConfig();
+        saveDatabase();
+
     }
 
-    public void saveFile() {
-        //TODO: Save configs and data
+    public void saveDatabase() {
+        try {
+            database.save(databaseFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        //TODO: Save data
     }
 
-    public void loadFile() {
-        //TODO: Load configs and data
+    public void loadDatabase() {
+        databaseFile = new File(getDataFolder(), "wormholes.yml");
+        database = new YamlConfiguration();
+
+        if(!databaseFile.exists()) {
+            database.createSection("wormholes");
+            saveDatabase();
+        }
+
+        try {
+            database.load(databaseFile);
+        } catch (IOException e) {
+            logger.warning("Failed to load database.");
+            e.printStackTrace();
+        } catch (InvalidConfigurationException e) {
+            logger.warning("Database file is corrupt.");
+            logger.warning("Failed to load config.");
+            e.printStackTrace();
+        }
+
+        for(World world : Bukkit.getWorlds()) {
+            List<?> wormholes = database.getConfigurationSection("wormholes").getValues();
+        }
+
+
+        //TODO: Load data
     }
 }
