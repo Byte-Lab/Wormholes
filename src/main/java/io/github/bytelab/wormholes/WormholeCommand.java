@@ -42,7 +42,7 @@ public class WormholeCommand implements CommandExecutor {
 
                 if (args[1].equals("create") || args[1].equals("c")) { return onCreateCommand(player, args); }
 
-            } catch (InsuficientPermissionException e) {
+            } catch (InsufficientPermissionException e) {
                 sender.sendMessage(config.getString("noPermission").replaceAll("&", "§"));
             }
         }
@@ -51,8 +51,8 @@ public class WormholeCommand implements CommandExecutor {
         return false;
     }
 
-    private boolean onCreateCommand(Player sender, String[] args) throws InsuficientPermissionException {
-        if (! sender.hasPermission(new Permission("wh.create")) && ! sender.isOp()) { throw new InsuficientPermissionException(); }
+    private boolean onCreateCommand(Player sender, String[] args) throws InsufficientPermissionException {
+        if (! sender.hasPermission(new Permission("wh.create")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
         //assuming args: <name> <destX> <destY> <destZ>
         Vector position = new Vector(
           sender.getLocation().getX(),
