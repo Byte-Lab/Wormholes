@@ -25,7 +25,6 @@
  * wormholes.list
  * wormholes.options
  */
-
 package io.github.bytelab.wormholes;
 
 import org.bukkit.Bukkit;
@@ -43,11 +42,12 @@ import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
-    private static Main instance;
     PluginDescriptionFile pdf = this.getDescription();
     Logger logger = Logger.getLogger("Wormholes");
     FileConfiguration database;
     File databaseFile;
+
+    private static Main instance;
 
     public static Main getInstance() {
         return instance;
@@ -62,6 +62,8 @@ public class Main extends JavaPlugin {
 
         getCommand("wh").setExecutor(new WormholeCommand());
         getCommand("wormhole").setExecutor(new WormholeCommand());
+
+        loadDatabase();
 
         logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
     }
