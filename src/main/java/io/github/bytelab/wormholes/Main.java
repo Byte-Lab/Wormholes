@@ -117,12 +117,6 @@ public class Main extends JavaPlugin {
             logger.warning("Failed to load config.");
             e.printStackTrace();
         }
-
-        for(World world : Bukkit.getWorlds()) {
-            List<?> wormholes = database.getConfigurationSection("wormholes").getValues();
-        }
-
-
         //TODO: Load data
     }
 }
