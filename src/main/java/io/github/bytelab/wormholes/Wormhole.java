@@ -33,11 +33,6 @@ import java.util.UUID;
 
 public class Wormhole implements Destination {
 
-    public static final FireworkEffect effect = FireworkEffect.builder()
-      .withColor(Color.BLACK)
-      .withFade(Color.BLACK)
-      .build();
-
     private final UUID uuid;
     private Vector position;
     private World world;
