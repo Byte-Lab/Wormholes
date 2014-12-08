@@ -60,8 +60,10 @@ public class Main extends JavaPlugin {
     }
 
     public void onEnable() {
-        Config.pluginConfiguration();
+
         instance = this;
+
+        Config.pluginConfiguration();
 
         WormholeManager.getInstance().init();
 
@@ -81,7 +83,7 @@ public class Main extends JavaPlugin {
 
         logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been disabled!");
     }
-    
+
     public void saveDatabase() {
 
         databaseFile = new File(getDataFolder(), "wormholes.yml");

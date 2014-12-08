@@ -31,14 +31,17 @@ public class Config {
 
     public static String soundType = config.getString("soundType");
 
-
     public static void pluginConfiguration() {
         FileConfiguration config = Main.getInstance().getConfig();
 
+        config.addDefault("config", 1);
         config.addDefault("prefix", "&a[&bWormholes&a] ");
-        config.addDefault("noPermission", "&cYou don't have permission to use that command!");
-        config.addDefault("illegalConsoleSender", "&cThat command may not be sent from the console!");
+        config.addDefault("noPermission", "&cERROR: You don't have permission to use that command!");
+        config.addDefault("illegalConsoleSender", "&cERROR: That command may not be sent from the console!");
         config.addDefault("wormholeCreation", "&bWormhole has been successfully created!");
+        config.addDefault("createCommandArguments", "&cERROR: /wormhole &a<&cname&a> <&cdestX&a> <&cdestY&a> <&cdestZ&a> [&cworld&a]");
+        config.addDefault("destinationError", "&cERROR: Destination values must be numbers!");
+
         config.addDefault("sound", true);
         config.addDefault("soundType", "vacuum");
         config.addDefault("color", false);
@@ -47,7 +50,6 @@ public class Config {
         Main.getInstance().saveConfig();
 
     }
-
 
 }
 

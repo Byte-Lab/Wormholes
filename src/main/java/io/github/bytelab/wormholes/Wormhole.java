@@ -85,11 +85,6 @@ public class Wormhole implements Destination {
         this.destination = destination;
     }
 
-    public void updateInWorld() {
-        ParticleGenerator.idleWormhole(this);
-        SoundGenerator.idleWormhole(this);
-    }
-
     @Override
     public Vector getPosition(Entity entity) {
         return position;
@@ -103,4 +98,10 @@ public class Wormhole implements Destination {
     public UUID getUuid() {
         return uuid;
     }
+
+    public void updateInWorld() {
+        ParticleGenerator.idleWormhole(this);
+        SoundGenerator.idleWormhole(this);
+    }
+
 }
