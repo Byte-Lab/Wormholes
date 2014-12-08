@@ -100,12 +100,6 @@ public class Main extends JavaPlugin {
         databaseFile = new File(getDataFolder(), "wormholes.yml");
         database = new YamlConfiguration();
 
-        try {
-            database.save(databaseFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         DestinationManager.getInstance().putDestinations(database.createSection("destinations"));
 
         //Save wormholes.
