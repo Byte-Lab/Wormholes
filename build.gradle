@@ -45,6 +45,7 @@ repositories {
 
 dependencies {
 	compile group: 'org.bukkit', name: 'bukkit', version: '1.7.9-R0.2'
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 configure([compileJava, compileTestJava]) {
@@ -66,6 +67,7 @@ license {
 	ext.currentYear = Calendar.getInstance().get(Calendar.YEAR)
 	
 	exclude "**/*.info"
+	exclude "**/*.yml"
 
     header rootProject.file('HEADER.txt')
     skipExistingHeaders true

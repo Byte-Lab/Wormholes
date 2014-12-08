@@ -19,22 +19,33 @@
  */
 package io.github.bytelab.wormholes;
 
-import io.github.bytelab.wormholes.destination.WormholeDestination;
+import io.github.bytelab.wormholes.destination.Destination;
+import io.github.bytelab.wormholes.effect.ParticleGenerator;
+import io.github.bytelab.wormholes.effect.SoundGenerator;
+import io.github.bytelab.wormholes.particle.ParticleEffect;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class Wormhole {
+public class Wormhole implements Destination {
+
+    public static final FireworkEffect effect = FireworkEffect.builder()
+      .withColor(Color.BLACK)
+      .withFade(Color.BLACK)
+      .build();
 
     private final UUID uuid;
     private Vector position;
     private World world;
     private String name;
 
-    private WormholeDestination destination;
+    private Destination destination;
 
-    public Wormhole(Vector position, World world, String name, WormholeDestination destination) {
+    public Wormhole(Vector position, World world, String name, Destination destination) {
         this.position = position;
         this.world = world;
         this.name = name;
@@ -42,7 +53,7 @@ public class Wormhole {
         this.uuid = UUID.randomUUID();
     }
 
-    public Wormhole(Vector position, World world, String name, WormholeDestination destination, UUID uuid) {
+    public Wormhole(Vector position, World world, String name, Destination destination, UUID uuid) {
         this.position = position;
         this.world = world;
         this.name = name;
@@ -74,19 +85,30 @@ public class Wormhole {
         this.name = name;
     }
 
-    public WormholeDestination getDestination() {
+    public Destination getDestination() {
         return destination;
     }
 
-    public void setDestination(WormholeDestination destination) {
+    public void setDestination(Destination destination) {
         this.destination = destination;
+    }
+
+    public void updateInWorld() {
+        ParticleGenerator.idleWormhole(this);
+        SoundGenerator.idleWormhole(this);
+    }
+
+    @Override
+    public Vector getPosition(Entity entity) {
+        return position;
+    }
+
+    @Override
+    public World getWorld(Entity entity) {
+        return world;
     }
 
     public UUID getUuid() {
         return uuid;
-    }
-
-    public void updateInWorld() {
-        //TODO: Spawn particles etc.
     }
 }

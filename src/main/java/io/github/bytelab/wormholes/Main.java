@@ -28,23 +28,27 @@
 
 package io.github.bytelab.wormholes;
 
+import io.github.bytelab.wormholes.destination.DestinationManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
     private static Main instance;
-    PluginDescriptionFile pdf = this.getDescription();
+    PluginDescriptionFile descriptionFile = this.getDescription();
     Logger logger = Logger.getLogger("Wormholes");
     FileConfiguration database;
     File databaseFile;
@@ -55,20 +59,24 @@ public class Main extends JavaPlugin {
 
     public void onEnable() {
         pluginConfiguration();
-
         instance = this;
 
-        WormholeManager.init();
+        WormholeManager.getInstance().init();
 
         getCommand("wh").setExecutor(new WormholeCommand());
         getCommand("wormhole").setExecutor(new WormholeCommand());
 
-        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been enabled!");
+        loadDatabase();
+
+        logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been enabled!");
+
     }
 
     public void onDisable() {
 
-        logger.info(pdf.getName() + " version " + pdf.getVersion() + " has been disabled!");
+        saveDatabase();
+
+        logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been disabled!");
     }
 
     public void pluginConfiguration() {
@@ -81,19 +89,53 @@ public class Main extends JavaPlugin {
 
         config.options().copyDefaults(true);
         saveConfig();
-        saveDatabase();
 
     }
 
     public void saveDatabase() {
+
+        databaseFile = new File(getDataFolder(), "wormholes.yml");
+        database = new YamlConfiguration();
+
         try {
             database.save(databaseFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        DestinationManager.getInstance().putDestinations(database.createSection("destinations"));
 
-        //TODO: Save data
+        //Save wormholes.
+        ConfigurationSection whSection = database.createSection("wormholes");
+
+        for (Wormhole wormhole : WormholeManager.getInstance()) {
+
+            ConfigurationSection section;
+            if(whSection.getConfigurationSection(wormhole.getWorld().getUID().toString()) == null) {
+                section = whSection
+                  .createSection(wormhole.getWorld().getUID().toString())
+                  .createSection(wormhole.getName());
+            } else {
+                section = whSection
+                  .getConfigurationSection(wormhole.getWorld().getUID().toString())
+                  .createSection(wormhole.getName());
+            }
+
+            ConfigurationSection locationSection = section.createSection("location");
+
+            locationSection.set("posX", wormhole.getPosition().getX());
+            locationSection.set("posY", wormhole.getPosition().getY());
+            locationSection.set("posZ", wormhole.getPosition().getZ());
+            section.set("destination", wormhole.getDestination().getUuid().toString());
+            section.set("uuid", wormhole.getUuid().toString());
+        }
+
+        try {
+            database.save(databaseFile);
+        } catch (IOException e) {
+            logger.warning("Failed to save database.");
+            e.printStackTrace();
+        }
     }
 
     public void loadDatabase() {
@@ -116,11 +158,34 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
+        DestinationManager.getInstance().getDestinations(database.getConfigurationSection("destinations"));
+
         for(World world : Bukkit.getWorlds()) {
-            List<?> wormholes = database.getConfigurationSection("wormholes").getValues();
+            ConfigurationSection whSection = database.getConfigurationSection("wormholes").getConfigurationSection(world.getUID().toString());
+            if(whSection == null) continue;
+
+            Set<String> wormholes = whSection.getKeys(false);
+
+            for(String name : wormholes) {
+                ConfigurationSection section = whSection.getConfigurationSection(name);
+                ConfigurationSection locationSection = section.getConfigurationSection("location");
+
+                WormholeManager.getInstance().add(
+                  new Wormhole(
+                    new Vector(
+                      locationSection.getDouble("posX"),
+                      locationSection.getDouble("posY"),
+                      locationSection.getDouble("posZ")
+                    ),
+                    world,
+                    name,
+                    DestinationManager.getInstance().get(UUID.fromString(section.getString("destination"))),
+                    UUID.fromString(section.getString("uuid"))
+                  )
+                );
+
+                System.out.println(DestinationManager.getInstance().get(UUID.fromString(section.getString("destination"))));
+            }
         }
-
-
-        //TODO: Load data
     }
 }

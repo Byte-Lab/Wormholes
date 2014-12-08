@@ -21,24 +21,139 @@ package io.github.bytelab.wormholes;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class WormholeManager {
+public class WormholeManager implements Collection<Wormhole> {
 
-    public static List<Wormhole> wormholes = new ArrayList<Wormhole>();
+    private static WormholeManager instance = new WormholeManager();
+    private Map<UUID, Wormhole> uuidWormholeMap = new HashMap<UUID, Wormhole>();
+    private Map<String, UUID> nameUUIDMap = new HashMap<String, UUID>();
 
-    public static void init() {
+    public static WormholeManager getInstance() {
+        return instance;
+    }
+
+    private WormholeManager() {}
+
+    public void init() {
         (new UpdateTask()).runTaskTimer(Main.getInstance(), 0, 2);
     }
 
-    private static class UpdateTask extends BukkitRunnable {
+    public Wormhole get(String name) {
+        return uuidWormholeMap.get(nameUUIDMap.get(name));
+    }
+
+    public Wormhole get(UUID uuid) {
+        return uuidWormholeMap.get(uuid);
+    }
+
+
+    @Override
+    public int size() {
+        return uuidWormholeMap.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return uuidWormholeMap.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return uuidWormholeMap.values().contains(o);
+    }
+
+    @Override
+    public Iterator<Wormhole> iterator() {
+        return uuidWormholeMap.values().iterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return uuidWormholeMap.values().toArray();
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return uuidWormholeMap.values().toArray(a);
+    }
+
+    @Override
+    public boolean add(Wormhole wormhole) {
+        boolean changed = uuidWormholeMap.get(wormhole.getUuid()) != wormhole;
+
+        uuidWormholeMap.put(wormhole.getUuid(), wormhole);
+        nameUUIDMap.put(wormhole.getName(), wormhole.getUuid());
+
+        return changed;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        if (! (o instanceof Wormhole)) { return false; }
+
+        boolean changed;
+        Wormhole wormhole = (Wormhole) o;
+
+        changed = uuidWormholeMap.remove(wormhole.getUuid(), wormhole);
+        changed = nameUUIDMap.remove(wormhole.getName(), wormhole.getUuid()) || changed;
+
+        return changed;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return uuidWormholeMap.values().containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends Wormhole> c) {
+        boolean changed = false;
+
+        for (Wormhole wormhole : c) {
+            changed = add(wormhole) || changed;
+        }
+
+        return changed;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean changed = false;
+
+        for (Object o : c) {
+            changed = remove(o) || changed;
+        }
+
+        return changed;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean changed = false;
+
+        for (Object o : c) {
+            if (! contains(o)) { changed = remove(o) || changed; }
+        }
+
+        return changed;
+    }
+
+    @Override
+    public void clear() {
+        uuidWormholeMap.clear();
+        nameUUIDMap.clear();
+    }
+
+    //Update Task
+
+    private class UpdateTask extends BukkitRunnable {
 
         @Override
         public void run() {
             //Iterate through all wormholes and perform update.
 
-            for (Wormhole wormhole : wormholes) {
+            for (Wormhole wormhole : getInstance()) {
                 wormhole.updateInWorld();
             }
         }

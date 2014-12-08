@@ -19,17 +19,61 @@
  */
 package io.github.bytelab.wormholes.destination;
 
+import io.github.bytelab.wormholes.WormholeManager;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-public interface WormholeDestination {
+import java.util.Random;
+import java.util.UUID;
 
-    /**
-     * @param entity The entity attempting to use the portal
-     *
-     * @return the position to send it.
-     */
-    public Vector getPosition(Entity entity);
+public class WormholeDestination implements NamedDestination {
 
+    private UUID uuid = UUID.randomUUID();
+    private UUID wormholeUuid;
+    private Random random = new Random();
 
+    public WormholeDestination(UUID wormholeUuid) {
+        this.wormholeUuid = wormholeUuid;
+    }
+
+    public WormholeDestination(UUID wormholeUuid, UUID uuid) {
+        this.wormholeUuid = wormholeUuid;
+        this.uuid = uuid;
+    }
+
+    @Override
+    public String getPrefix() {
+        return "wormhole";
+    }
+
+    @Override
+    public String getName() {
+        return WormholeManager.getInstance().get(wormholeUuid).getName();
+    }
+
+    @Override
+    public Vector getPosition(Entity entity) {
+        Vector position = WormholeManager.getInstance().get(wormholeUuid).getPosition();
+
+        position.setX((position.getX() + random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1));
+        position.setY((position.getY() + random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1));
+        position.setZ((position.getZ() + random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1));
+
+        return WormholeManager.getInstance().get(wormholeUuid).getPosition();
+    }
+
+    @Override
+    public World getWorld(Entity entity) {
+        return WormholeManager.getInstance().get(wormholeUuid).getWorld();
+    }
+
+    @Override
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public UUID getWormholeUuid() {
+        return wormholeUuid;
+    }
 }

@@ -20,55 +20,31 @@
 package io.github.bytelab.wormholes.destination;
 
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class FixedDestination implements Destination {
+public class CoordinateDestination extends FixedDestination implements NamedDestination {
 
-    private Vector position;
+    private String name;
 
-    private UUID uuid;
-
-    private World world;
-
-    public FixedDestination(Vector position, World world, UUID uuid) {
-        this.position = position;
-        this.world = world;
-        this.uuid = uuid;
+    public CoordinateDestination(Vector position, World world, String name, UUID uuid) {
+        super(position, world, uuid);
+        this.name = name;
     }
 
-    public FixedDestination(Vector position, World world) {
-        this.position = position;
-        this.world = world;
-        this.uuid = UUID.randomUUID();
+    public CoordinateDestination(Vector position, World world, String name) {
+        super(position, world);
+        this.name = name;
     }
 
     @Override
-    public Vector getPosition(Entity entity) {
-        return position;
+    public String getPrefix() {
+        return "coordinate";
     }
 
     @Override
-    public World getWorld(Entity entity) {
-        return world;
-    }
-
-    public World getWorld() {
-        return world;
-    }
-
-    @Override
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public Vector getPosition() {
-        return position;
-    }
-
-    public void setPosition(Vector position) {
-        this.position = position;
+    public String getName() {
+        return name;
     }
 }

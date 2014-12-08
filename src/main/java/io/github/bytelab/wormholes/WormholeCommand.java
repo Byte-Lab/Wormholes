@@ -20,8 +20,11 @@
 
 package io.github.bytelab.wormholes;
 
+import io.github.bytelab.wormholes.destination.Destination;
+import io.github.bytelab.wormholes.destination.DestinationManager;
 import io.github.bytelab.wormholes.destination.FixedDestination;
-import io.github.bytelab.wormholes.destination.WormholeDestination;
+import io.github.bytelab.wormholes.exception.InsufficientPermissionException;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -38,39 +41,56 @@ public class WormholeCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            try {
+            if(args.length < 1) {
+                return false;
+            }
 
-                if (args[1].equals("create") || args[1].equals("c")) { return onCreateCommand(player, args); }
+            try {
+                if (args[0].equals("create") || args[0].equals("c")) { return onCreateCommand(player, args); }
 
             } catch (InsufficientPermissionException e) {
                 sender.sendMessage(config.getString("noPermission").replaceAll("&", "§"));
             }
-        }
 
-        sender.sendMessage(config.getString("illegalConsoleSender").replaceAll("&", "§"));
-        return false;
+            return false;
+        } else {
+            sender.sendMessage(config.getString("illegalConsoleSender").replaceAll("&", "§"));
+            return false;
+        }
     }
 
     private boolean onCreateCommand(Player sender, String[] args) throws InsufficientPermissionException {
         if (! sender.hasPermission(new Permission("wh.create")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
-        //assuming args: <name> <destX> <destY> <destZ>
+
+        if (args.length < 5 || args.length > 6) {
+            sender.sendMessage(
+              new String[]{
+                "Invalid argument count.",
+                "Usage: <name> <destX> <destY> <destZ> [world]"
+              }
+            );
+        }
+
+        //assuming args: <name> <destX> <destY> <destZ> [world]
         Vector position = new Vector(
           sender.getLocation().getX(),
           sender.getLocation().getY(),
           sender.getLocation().getZ()
         );
 
-        WormholeDestination destination = new FixedDestination(
+        Destination destination = new FixedDestination(
           new Vector(
             Double.parseDouble(args[2]),
             Double.parseDouble(args[3]),
             Double.parseDouble(args[4])
-          )
+          ),
+          args.length >= 6 ? Bukkit.getWorld(args[5]) : sender.getWorld()
         );
 
         //TODO: Allow for named coordinates & tracked targets.
 
-        WormholeManager.wormholes.add(new Wormhole(position, sender.getWorld(), args[1], destination));
+        DestinationManager.getInstance().add(destination);
+        WormholeManager.getInstance().add(new Wormhole(position, sender.getWorld(), args[1], destination));
 
         sender.sendMessage(config.getString("wormholeCreation").replaceAll("&", "§"));
 
@@ -79,3 +99,4 @@ public class WormholeCommand implements CommandExecutor {
 
 
 }
+///wh create test -256 69 115
