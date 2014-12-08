@@ -19,23 +19,53 @@
  */
 package io.github.bytelab.wormholes.handler;
 
+import io.github.bytelab.wormholes.Main;
+import io.github.bytelab.wormholes.TeleportManager;
+import io.github.bytelab.wormholes.Wormhole;
+import io.github.bytelab.wormholes.WormholeManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
-public class PlayerMoveHandler {
+public class PlayerMoveHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if(
+        if (
           event.getFrom().getBlockX() == event.getTo().getBlockX()
-          && event.getFrom().getBlockY() == event.getTo().getBlockY()
-          && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
+            && event.getFrom().getBlockY() == event.getTo().getBlockY()
+            && event.getFrom().getBlockZ() == event.getTo().getBlockZ()
           ) {
             return;
         }
 
+        new BoundaryChecker(event.getPlayer()).runTaskAsynchronously(Main.getInstance());
 
+
+    }
+
+    private class BoundaryChecker extends BukkitRunnable {
+
+        private Player player;
+
+        private BoundaryChecker(Player player) {
+            this.player = player;
+        }
+
+        public void run() {
+            Vector playerPosition = player.getLocation().toVector();
+
+            for (Wormhole wormhole : WormholeManager.getInstance()) {
+                if (wormhole.getTeleportArea().contains(playerPosition)) {
+                    TeleportManager.getInstance().scheduleTeleport(player, wormhole);
+                    break;
+                }
+            }
+        }
     }
 
 }

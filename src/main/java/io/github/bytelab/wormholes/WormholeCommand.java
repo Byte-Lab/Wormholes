@@ -40,7 +40,7 @@ public class WormholeCommand implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if(args.length < 1) {
+            if (args.length < 1) {
                 return false;
             }
 
@@ -52,7 +52,8 @@ public class WormholeCommand implements CommandExecutor {
             }
 
             return false;
-        } else {
+        }
+        else {
             sender.sendMessage(config.getString("illegalConsoleSender").replaceAll("&", "§"));
             return false;
         }

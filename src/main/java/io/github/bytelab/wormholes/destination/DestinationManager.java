@@ -21,13 +21,11 @@ package io.github.bytelab.wormholes.destination;
 
 import io.github.bytelab.wormholes.exception.NoSuchTypeException;
 import io.github.bytelab.wormholes.exception.UnknownTypeException;
-import io.github.bytelab.wormholes.util.CombinedIterator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 import java.util.function.Consumer;
 
 public class DestinationManager implements Iterable<Destination> {
@@ -137,8 +135,14 @@ public class DestinationManager implements Iterable<Destination> {
     }
 
     public void putDestination(ConfigurationSection section, Destination destination) {
-        if (destination instanceof FixedDestination) { putFixedDestination(section, (FixedDestination) destination); return; }
-        if (destination instanceof WormholeDestination) { putWormholeDestination(section, (WormholeDestination) destination); return; }
+        if (destination instanceof FixedDestination) {
+            putFixedDestination(section, (FixedDestination) destination);
+            return;
+        }
+        if (destination instanceof WormholeDestination) {
+            putWormholeDestination(section, (WormholeDestination) destination);
+            return;
+        }
 
         throw new UnknownTypeException(destination.getClass().toGenericString());
     }

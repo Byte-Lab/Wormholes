@@ -22,6 +22,7 @@ package io.github.bytelab.wormholes;
 import io.github.bytelab.wormholes.destination.Destination;
 import io.github.bytelab.wormholes.effect.ParticleGenerator;
 import io.github.bytelab.wormholes.effect.SoundGenerator;
+import io.github.bytelab.wormholes.util.Cuboid;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
@@ -34,15 +35,12 @@ public class Wormhole implements Destination {
     private Vector position;
     private World world;
     private String name;
+    private Cuboid teleportArea;
 
     private Destination destination;
 
     public Wormhole(Vector position, World world, String name, Destination destination) {
-        this.position = position;
-        this.world = world;
-        this.name = name;
-        this.destination = destination;
-        this.uuid = UUID.randomUUID();
+        this(position, world, name, destination, UUID.randomUUID());
     }
 
     public Wormhole(Vector position, World world, String name, Destination destination, UUID uuid) {
@@ -51,6 +49,18 @@ public class Wormhole implements Destination {
         this.name = name;
         this.destination = destination;
         this.uuid = uuid;
+        this.teleportArea = new Cuboid(
+          new Vector(
+            position.getX() - Config.suckRadius - 1,
+            position.getY() - Config.suckRadius - 1,
+            position.getZ() - Config.suckRadius - 1
+          ),
+          new Vector(
+            position.getX() + Config.suckRadius - 1,
+            position.getY() + Config.suckRadius - 1,
+            position.getZ() + Config.suckRadius - 1
+          )
+        );
     }
 
     public Vector getPosition() {
@@ -102,5 +112,9 @@ public class Wormhole implements Destination {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public Cuboid getTeleportArea() {
+        return teleportArea;
     }
 }

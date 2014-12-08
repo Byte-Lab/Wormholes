@@ -22,6 +22,7 @@ package io.github.bytelab.wormholes.effect;
 import io.github.bytelab.wormholes.Config;
 import io.github.bytelab.wormholes.Wormhole;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
 public class SoundGenerator {
 
@@ -43,11 +44,8 @@ public class SoundGenerator {
         }
     }
 
-    public static void enterWormhole(Wormhole wormhole) {
-        wormhole.getWorld().playSound(
-          wormhole.getPosition()
-            .toLocation(wormhole.getWorld()), Sound.ENDERMAN_TELEPORT, 2, 2
-        );
+    public static void enterWormhole(Player player) {
+        player.getWorld().playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 2, 2);
     }
 
 }

@@ -31,11 +31,11 @@ public class ParticleGenerator {
             .toLocation(wormhole.getWorld(), 0, 0), 100D
         );
         ParticleEffect.RED_DUST.display(
-          1.2F, 1.2F, 1.2F, 0.00001F, 1500, wormhole.getPosition()
+          (float) (Config.radius / 2.5), (float) (Config.radius / 2.5), (float) (Config.radius / 2.5), 0.00001F, 1500, wormhole.getPosition()
             .toLocation(wormhole.getWorld(), 0, 0), 100D
         );
         ParticleEffect.PORTAL.display(
-          1.5F, 1.5F, 1.5F, 1F, 1000, wormhole.getPosition()
+          Config.radius / 2, Config.radius / 2, Config.radius / 2, 1F, 1000, wormhole.getPosition()
             .toLocation(wormhole.getWorld(), 0, 0), 100D
         );
     }

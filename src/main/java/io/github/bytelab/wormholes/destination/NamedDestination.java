@@ -25,13 +25,11 @@ package io.github.bytelab.wormholes.destination;
 public interface NamedDestination extends Destination {
 
     /**
-     *
      * @return the destinations name prefix
      */
     public String getPrefix();
 
     /**
-     *
      * @return the destinations name
      */
     public String getName();

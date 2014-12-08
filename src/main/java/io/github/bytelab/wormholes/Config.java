@@ -27,4 +27,8 @@ public class Config {
 
     public static String soundType = "vacuum";
 
+    public static int suckRadius = 3;
+
+    public static int radius = 3;
+
 }

@@ -34,7 +34,7 @@ public class CombinedIterator<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
         for (Iterator<? extends T> iterator : iterators) {
-            if (iterator.hasNext()) return true;
+            if (iterator.hasNext()) { return true; }
         }
         return false;
     }
@@ -42,7 +42,7 @@ public class CombinedIterator<T> implements Iterator<T> {
     @Override
     public T next() {
         for (Iterator<? extends T> iterator : iterators) {
-            if (iterator.hasNext()) return iterator.next();
+            if (iterator.hasNext()) { return iterator.next(); }
         }
 
         throw new NoSuchElementException();

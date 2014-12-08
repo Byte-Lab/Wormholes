@@ -28,6 +28,7 @@
 package io.github.bytelab.wormholes;
 
 import io.github.bytelab.wormholes.destination.DestinationManager;
+import io.github.bytelab.wormholes.handler.PlayerMoveHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -64,12 +65,15 @@ public class Main extends JavaPlugin {
         instance = this;
 
         WormholeManager.getInstance().init();
+        TeleportManager.getInstance().init();
+
+        //Register Events
+        getServer().getPluginManager().registerEvents(new PlayerMoveHandler(), this);
 
         getCommand("wh").setExecutor(new WormholeCommand());
         getCommand("wormhole").setExecutor(new WormholeCommand());
 
         loadDatabase();
-
 
         logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been enabled!");
 
@@ -109,11 +113,12 @@ public class Main extends JavaPlugin {
         for (Wormhole wormhole : WormholeManager.getInstance()) {
 
             ConfigurationSection section;
-            if(whSection.getConfigurationSection(wormhole.getWorld().getUID().toString()) == null) {
+            if (whSection.getConfigurationSection(wormhole.getWorld().getUID().toString()) == null) {
                 section = whSection
                   .createSection(wormhole.getWorld().getUID().toString())
                   .createSection(wormhole.getName());
-            } else {
+            }
+            else {
                 section = whSection
                   .getConfigurationSection(wormhole.getWorld().getUID().toString())
                   .createSection(wormhole.getName());
@@ -140,7 +145,7 @@ public class Main extends JavaPlugin {
         databaseFile = new File(getDataFolder(), "wormholes.yml");
         database = new YamlConfiguration();
 
-        if(!databaseFile.exists()) {
+        if (! databaseFile.exists()) {
             database.createSection("wormholes");
             saveDatabase();
         }
@@ -158,13 +163,13 @@ public class Main extends JavaPlugin {
 
         DestinationManager.getInstance().getDestinations(database.getConfigurationSection("destinations"));
 
-        for(World world : Bukkit.getWorlds()) {
+        for (World world : Bukkit.getWorlds()) {
             ConfigurationSection whSection = database.getConfigurationSection("wormholes").getConfigurationSection(world.getUID().toString());
-            if(whSection == null) continue;
+            if (whSection == null) { continue; }
 
             Set<String> wormholes = whSection.getKeys(false);
 
-            for(String name : wormholes) {
+            for (String name : wormholes) {
                 ConfigurationSection section = whSection.getConfigurationSection(name);
                 ConfigurationSection locationSection = section.getConfigurationSection("location");
 

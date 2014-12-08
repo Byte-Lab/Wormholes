@@ -38,7 +38,6 @@ public interface Destination {
     public World getWorld(Entity entity);
 
     /**
-     *
      * @return The {@link Destination}'s UUID
      */
     public UUID getUuid();
