@@ -118,6 +118,8 @@ public class WormholeCommand implements CommandExecutor {
         if(wormhole == null) return false;
 
         WormholeManager.getInstance().remove(wormhole);
+
+        return false;
     }
 
 
