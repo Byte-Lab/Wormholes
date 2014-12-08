@@ -39,8 +39,11 @@ public class Config {
         config.addDefault("noPermission", "&cERROR: You don't have permission to use that command!");
         config.addDefault("illegalConsoleSender", "&cERROR: That command may not be sent from the console!");
         config.addDefault("wormholeCreation", "&bWormhole has been successfully created!");
-        config.addDefault("createCommandArguments", "&cERROR: /wormhole &a<&cname&a> <&cdestX&a> <&cdestY&a> <&cdestZ&a> [&cworld&a]");
+        config.addDefault("createArguments", "&cERROR: /wormhole &a<&cname&a> <&cdestX&a> <&cdestY&a> <&cdestZ&a> [&cworld&a]");
+        config.addDefault("removeArguments", "&cERROR: /wormhole &a<&cremove&a> <&cname&a>");
         config.addDefault("destinationError", "&cERROR: Destination values must be numbers!");
+        config.addDefault("wormholeRemoveError", "&cERROR: The specified wormhole does not exist!");
+        config.addDefault("wormholeRemoveSuccessful", "&bWormhole has been removed successfully!");
 
         config.addDefault("sound", true);
         config.addDefault("soundType", "vacuum");

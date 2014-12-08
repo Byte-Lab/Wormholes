@@ -35,11 +35,14 @@ import org.bukkit.util.Vector;
 public class WormholeCommand implements CommandExecutor {
 
     FileConfiguration config = Main.getInstance().getConfig();
-    String arguments = config.getString("createCommandArguments").replaceAll("&", "§");
+    String createArguments = config.getString("createCommandArguments").replaceAll("&", "§");
     String noPermission = config.getString("noPermission").replaceAll("&", "§");
     String console = config.getString("illegalConsoleSender").replaceAll("&", "§");
     String wormholeCreation = config.getString("wormholeCreation").replaceAll("&", "§");
     String destinationError = config.getString("destinationError").replaceAll("&", "§");
+    String removeArguments = config.getString("removeArguments").replaceAll("&", "§");
+    String wormholeRemoveError = config.getString("wormholeRemoveError").replaceAll("&", "§");
+    String wormholeRemoveSuccessful = config.getString("wormholeRemoveSuccessful").replaceAll("&", "§");
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender instanceof Player) {
@@ -74,7 +77,7 @@ public class WormholeCommand implements CommandExecutor {
         if (! sender.hasPermission(new Permission("wh.create")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
 
         if (args.length < 5 || args.length > 6) {
-            sender.sendMessage(arguments);
+            sender.sendMessage(createArguments);
             return false;
         }
 
@@ -86,16 +89,19 @@ public class WormholeCommand implements CommandExecutor {
         );
 
         Destination destination;
-
-        destination = new FixedDestination(
-          new Vector(
-            Double.parseDouble(args[2]),
-            Double.parseDouble(args[3]),
-            Double.parseDouble(args[4])
-          ),
-          args.length >= 6 ? Bukkit.getWorld(args[5]) : sender.getWorld()
-        );
-
+        try {
+            destination = new FixedDestination(
+                    new Vector(
+                            Double.parseDouble(args[2]),
+                            Double.parseDouble(args[3]),
+                            Double.parseDouble(args[4])
+                    ),
+                    args.length >= 6 ? Bukkit.getWorld(args[5]) : sender.getWorld()
+            );
+        } catch(NumberFormatException e) {
+            sender.sendMessage(destinationError);
+            return false;
+        }
         //TODO: Allow for named coordinates & tracked targets.
 
         DestinationManager.getInstance().add(destination);
@@ -107,19 +113,23 @@ public class WormholeCommand implements CommandExecutor {
     }
 
     private boolean onDeleteCommand(Player sender, String[] args) throws InsufficientPermissionException {
-        if (! sender.hasPermission(new Permission("wh.create")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
+        if (! sender.hasPermission(new Permission("wh.remove")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
 
         if (args.length != 2) {
+            sender.sendMessage(removeArguments);
             return false;
         }
 
         Wormhole wormhole = WormholeManager.getInstance().get(args[1]);
 
-        if(wormhole == null) return false;
+        if(wormhole == null) {
+            sender.sendMessage(wormholeRemoveError);
+            return false;
+        }
 
         WormholeManager.getInstance().remove(wormhole);
-
-        return false;
+        sender.sendMessage(wormholeRemoveSuccessful);
+        return true;
     }
 
 
