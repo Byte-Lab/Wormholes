@@ -85,6 +85,7 @@ public class Main extends JavaPlugin {
     public void pluginConfiguration() {
         FileConfiguration config = getConfig();
 
+        config.addDefault("config", 1);
         config.addDefault("prefix", "&a[&bWormholes&a] ");
         config.addDefault("noPermission", "&cYou don't have permission to use that command!");
         config.addDefault("illegalConsoleSender", "&cThat command may not be sent from the console!");
