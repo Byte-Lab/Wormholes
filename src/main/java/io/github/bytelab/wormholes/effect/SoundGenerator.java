@@ -38,7 +38,7 @@ public class SoundGenerator {
 
             wormhole.getWorld().playSound(
               wormhole.getPosition()
-                .toLocation(wormhole.getWorld()), sound, 2, 0.1F
+                .toLocation(wormhole.getWorld()), sound, 1, 0.1F
             );
         }
     }

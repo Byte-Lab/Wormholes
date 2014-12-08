@@ -19,12 +19,35 @@
  */
 package io.github.bytelab.wormholes;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 public class Config {
 
-    public static boolean useColors = false;
+    static FileConfiguration config = Main.getInstance().getConfig();
 
-    public static boolean playSounds = false;
+    public static boolean useColors = config.getBoolean("color");
 
-    public static String soundType = "vacuum";
+    public static boolean playSounds = config.getBoolean("sound");
+
+    public static String soundType = config.getString("soundType");
+
+
+    public static void pluginConfiguration() {
+        FileConfiguration config = Main.getInstance().getConfig();
+
+        config.addDefault("prefix", "&a[&bWormholes&a] ");
+        config.addDefault("noPermission", "&cYou don't have permission to use that command!");
+        config.addDefault("illegalConsoleSender", "&cThat command may not be sent from the console!");
+        config.addDefault("wormholeCreation", "&bWormhole has been successfully created!");
+        config.addDefault("sound", true);
+        config.addDefault("soundType", "vacuum");
+        config.addDefault("color", false);
+
+        config.options().copyDefaults(true);
+        Main.getInstance().saveConfig();
+
+    }
+
 
 }
+

@@ -60,7 +60,7 @@ public class Main extends JavaPlugin {
     }
 
     public void onEnable() {
-        pluginConfiguration();
+        Config.pluginConfiguration();
         instance = this;
 
         WormholeManager.getInstance().init();
@@ -80,19 +80,6 @@ public class Main extends JavaPlugin {
         saveDatabase();
 
         logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been disabled!");
-    }
-
-    public void pluginConfiguration() {
-        FileConfiguration config = getConfig();
-
-        config.addDefault("prefix", "&a[&bWormholes&a] ");
-        config.addDefault("noPermission", "&cYou don't have permission to use that command!");
-        config.addDefault("illegalConsoleSender", "&cThat command may not be sent from the console!");
-        config.addDefault("wormholeCreation", "&bWormhole has been successfully created!");
-
-        config.options().copyDefaults(true);
-        saveConfig();
-
     }
 
     public void saveDatabase() {
