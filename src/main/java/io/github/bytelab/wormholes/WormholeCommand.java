@@ -34,15 +34,19 @@ import org.bukkit.util.Vector;
 
 public class WormholeCommand implements CommandExecutor {
 
-    FileConfiguration config = Main.getInstance().getConfig();
-    String createArguments = config.getString("createCommandArguments").replaceAll("&", "§");
-    String noPermission = config.getString("noPermission").replaceAll("&", "§");
-    String console = config.getString("illegalConsoleSender").replaceAll("&", "§");
-    String wormholeCreation = config.getString("wormholeCreation").replaceAll("&", "§");
-    String destinationError = config.getString("destinationError").replaceAll("&", "§");
-    String removeArguments = config.getString("removeArguments").replaceAll("&", "§");
-    String wormholeRemoveError = config.getString("wormholeRemoveError").replaceAll("&", "§");
-    String wormholeRemoveSuccessful = config.getString("wormholeRemoveSuccessful").replaceAll("&", "§");
+
+        FileConfiguration config = Main.getInstance().getConfig();
+        String createArguments = config.getString("createArguments").replaceAll("&", "§");
+        String noPermission = config.getString("noPermission").replaceAll("&", "§");
+        String console = config.getString("illegalConsoleSender").replaceAll("&", "§");
+        String wormholeCreation = config.getString("wormholeCreation").replaceAll("&", "§");
+        String destinationError = config.getString("destinationError").replaceAll("&", "§");
+        String deleteArguments = config.getString("deleteArguments").replaceAll("&", "§");
+        String wormholeRemoveError = config.getString("wormholeRemoveError").replaceAll("&", "§");
+        String wormholeRemoveSuccessful = config.getString("wormholeRemoveSuccessful").replaceAll("&", "§");
+        String prefix = config.getString("prefix").replaceAll("&", "§");
+        String pluginReloaded = config.getString("pluginReloaded").replaceAll("&", "§");
+
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (sender instanceof Player) {
@@ -54,8 +58,10 @@ public class WormholeCommand implements CommandExecutor {
             }
 
             try {
-                if (args[0].equals("create") || args[0].equals("c")) { return onCreateCommand(player, args); }
-                if (args[0].equals("delete") || args[0].equals("d")) { return onDeleteCommand(player, args); }
+                if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c")) { return onCreateCommand(player, args); }
+                if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("d")) { return onDeleteCommand(player, args); }
+                if (args[0].equalsIgnoreCase("list")   || args[0].equalsIgnoreCase("l")) { return onListCommand(player, args);   }
+                if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("r")) { return onReloadCommand(player);       }
 
             } catch (InsufficientPermissionException e) {
                 sender.sendMessage(noPermission);
@@ -113,10 +119,11 @@ public class WormholeCommand implements CommandExecutor {
     }
 
     private boolean onDeleteCommand(Player sender, String[] args) throws InsufficientPermissionException {
-        if (! sender.hasPermission(new Permission("wh.remove")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
+
+        if (! sender.hasPermission(new Permission("wh.delete")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
 
         if (args.length != 2) {
-            sender.sendMessage(removeArguments);
+            sender.sendMessage(deleteArguments);
             return false;
         }
 
@@ -132,5 +139,30 @@ public class WormholeCommand implements CommandExecutor {
         return true;
     }
 
+    private boolean onListCommand(Player sender, String[] args) throws InsufficientPermissionException {
 
+        if (! sender.hasPermission(new Permission("wh.list")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
+
+        if(args.length == 1) {
+
+            sender.sendMessage(prefix + "[§7=================================§a]");
+
+            for(Wormhole wormhole : WormholeManager.getInstance()) {
+
+                String name = wormhole.getName();
+                String world = wormhole.getWorld().getName();
+                sender.sendMessage("§bFound wormhole:§c " + name + " §bin world:§c " + world);
+
+            }
+        }
+        return true;
+    }
+
+    private boolean onReloadCommand(Player sender) throws InsufficientPermissionException {
+
+        if (! sender.hasPermission(new Permission("wh.reload")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
+        //TODO: Add code to reload all configurations
+        sender.sendMessage(pluginReloaded);
+        return true;
+    }
 }
