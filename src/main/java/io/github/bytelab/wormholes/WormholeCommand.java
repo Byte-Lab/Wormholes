@@ -61,7 +61,8 @@ public class WormholeCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("c")) { return onCreateCommand(player, args); }
                 if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("d")) { return onDeleteCommand(player, args); }
                 if (args[0].equalsIgnoreCase("list")   || args[0].equalsIgnoreCase("l")) { return onListCommand(player, args);   }
-                if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("r")) { return onReloadCommand(player);       }
+                if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){ return onReloadCommand(player);       }
+                if (args[0].equalsIgnoreCase("rename") || args[0].equalsIgnoreCase("rn")){ return onRenameCommand(player, args); }
 
             } catch (InsufficientPermissionException e) {
                 sender.sendMessage(noPermission);
@@ -163,6 +164,13 @@ public class WormholeCommand implements CommandExecutor {
         if (! sender.hasPermission(new Permission("wh.reload")) && ! sender.isOp()) { throw new InsufficientPermissionException(); }
         //TODO: Add code to reload all configurations
         sender.sendMessage(pluginReloaded);
+        return true;
+    }
+
+    private boolean onRenameCommand(Player sender, String[] args) throws  InsufficientPermissionException {
+
+        //TODO: Add renaming
+        
         return true;
     }
 }
