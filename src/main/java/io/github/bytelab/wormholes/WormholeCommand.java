@@ -42,10 +42,12 @@ public class WormholeCommand implements CommandExecutor {
         String wormholeCreation = config.getString("wormholeCreation").replaceAll("&", "§");
         String destinationError = config.getString("destinationError").replaceAll("&", "§");
         String deleteArguments = config.getString("deleteArguments").replaceAll("&", "§");
-        String wormholeRemoveError = config.getString("wormholeRemoveError").replaceAll("&", "§");
+        String nullWormholeError = config.getString("wormholeRemoveError").replaceAll("&", "§");
         String wormholeRemoveSuccessful = config.getString("wormholeRemoveSuccessful").replaceAll("&", "§");
         String prefix = config.getString("prefix").replaceAll("&", "§");
         String pluginReloaded = config.getString("pluginReloaded").replaceAll("&", "§");
+        String renameSuccessful = config.getString("reloadSuccessful");
+        String renameArguments = config.getString("renameArguments");
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -131,7 +133,7 @@ public class WormholeCommand implements CommandExecutor {
         Wormhole wormhole = WormholeManager.getInstance().get(args[1]);
 
         if(wormhole == null) {
-            sender.sendMessage(wormholeRemoveError);
+            sender.sendMessage(nullWormholeError);
             return false;
         }
 
@@ -170,7 +172,23 @@ public class WormholeCommand implements CommandExecutor {
     private boolean onRenameCommand(Player sender, String[] args) throws  InsufficientPermissionException {
 
         //TODO: Add renaming
-        
+        if(! sender.hasPermission(new Permission("wh.rename")) && ! sender.isOp()) {throw new InsufficientPermissionException(); }
+
+        Wormhole wormhole = WormholeManager.getInstance().get(args[2]);
+
+        if(args.length < 3){
+            sender.sendMessage(renameArguments);
+            return false;
+        }
+
+        if(wormhole == null){
+            sender.sendMessage(nullWormholeError);
+            return false;
+        }
+
+        wormhole.setName(args[3]);
+        sender.sendMessage(renameSuccessful);
+
         return true;
     }
 }
