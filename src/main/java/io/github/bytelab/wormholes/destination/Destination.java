@@ -19,28 +19,32 @@
  */
 package io.github.bytelab.wormholes.destination;
 
+import me.tbotv63.core.util.container.Element;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public interface Destination {
+public interface Destination extends Element<Destination> {
 
     /**
      * @param entity The {@link org.bukkit.entity.Entity} attempting to use the portal
      *
      * @return the position to send it.
      */
-    public Vector getPosition(Entity entity);
+    Vector getPosition(Entity entity);
 
 
-    public World getWorld(Entity entity);
+    World getWorld(Entity entity);
 
     /**
-     *
      * @return The {@link Destination}'s UUID
      */
-    public UUID getUuid();
+    UUID getUuid();
 
+    @Override
+    Destination getValue();
+
+    String getType();
 }

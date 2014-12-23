@@ -29,9 +29,9 @@ public class FixedDestination implements Destination {
 
     private Vector position;
 
-    private UUID uuid;
+    private final UUID uuid;
 
-    private World world;
+    private final World world;
 
     public FixedDestination(Vector position, World world, UUID uuid) {
         this.position = position;
@@ -40,35 +40,61 @@ public class FixedDestination implements Destination {
     }
 
     public FixedDestination(Vector position, World world) {
-        this.position = position;
-        this.world = world;
-        this.uuid = UUID.randomUUID();
+        this(position, world, UUID.randomUUID());
     }
 
     @Override
     public Vector getPosition(Entity entity) {
+
         return position;
     }
 
     @Override
     public World getWorld(Entity entity) {
+
         return world;
     }
 
     public World getWorld() {
+
         return world;
     }
 
     @Override
     public UUID getUuid() {
+
         return uuid;
     }
 
+    @Override
+    public Destination getValue() {
+
+        return this;
+    }
+
     public Vector getPosition() {
+
         return position;
     }
 
     public void setPosition(Vector position) {
+
         this.position = position;
+    }
+
+    @Override
+    public String toString() {
+
+        return "FixedDestination{" +
+          "position=" + position +
+          ", uuid=" + uuid +
+          ", world=" + world +
+          '}';
+    }
+
+    @Override
+    public String getType() {
+
+        return "fixed";
     }
 }

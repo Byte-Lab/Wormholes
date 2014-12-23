@@ -23,34 +23,39 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
 
-    static FileConfiguration config = Main.getInstance().getConfig();
+    public static final boolean useColors;
 
-    public static boolean useColors = config.getBoolean("color");
+    public static final boolean playSounds;
 
-    public static boolean playSounds = config.getBoolean("sound");
+    public static final String soundType;
 
-    public static String soundType = config.getString("soundType");
+    public static final String localization;
 
-    public static void pluginConfiguration() {
+    public static final int suckRadius;
+
+    public static final int pageLength = 10;
+
+    static {
         FileConfiguration config = Main.getInstance().getConfig();
 
-        config.addDefault("config", 1);
-        config.addDefault("prefix", "&a[&bWormholes&a] ");
-        config.addDefault("noPermission", "&cERROR: You don't have permission to use that command!");
-        config.addDefault("illegalConsoleSender", "&cERROR: That command may not be sent from the console!");
-        config.addDefault("wormholeCreation", "&bWormhole has been successfully created!");
-        config.addDefault("createArguments", "&cERROR: /wormhole &a<&cname&a> <&cdestX&a> <&cdestY&a> <&cdestZ&a> [&cworld&a]");
-        config.addDefault("deleteArguments", "&cERROR: /wormhole delete0 &a<&cname&a>");
-        config.addDefault("destinationError", "&cERROR: Destination values must be numbers!");
-        config.addDefault("nullWormholeError", "&cERROR: The specified wormhole does not exist!");
-        config.addDefault("wormholeRemoveSuccessful", "&bWormhole has been removed successfully!");
-        config.addDefault("pluginReloaded", "&bSucessfully reloaded plugin!");
-        config.addDefault("renameSuccessful", "&bSucessfully renamed wormhole!");
-        config.addDefault("renameArguments", "&cERROR: /wormhole rename &a<&cname&a> <&cnew name&a>");
+        useColors = config.getBoolean("color");
+        playSounds = config.getBoolean("sound");
+        soundType = config.getString("soundType");
+        localization = config.getString("localization");
+        suckRadius = config.getInt("suckRadius");
+
+    }
+
+    public static void pluginConfiguration() {
+
+        FileConfiguration config = Main.getInstance().getConfig();
+
 
         config.addDefault("sound", true);
         config.addDefault("soundType", "vacuum");
         config.addDefault("color", false);
+        config.addDefault("localization", "en_US");
+        config.addDefault("suckRadius", 3);
 
         config.options().copyDefaults(true);
         Main.getInstance().saveConfig();

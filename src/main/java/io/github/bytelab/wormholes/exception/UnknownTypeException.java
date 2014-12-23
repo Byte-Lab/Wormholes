@@ -21,6 +21,8 @@ package io.github.bytelab.wormholes.exception;
 
 public class UnknownTypeException extends RuntimeException {
 
+    private static final long serialVersionUID = 1;
+
     public UnknownTypeException(String message) {
         super(message);
     }

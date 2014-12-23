@@ -19,7 +19,7 @@
  */
 package io.github.bytelab.wormholes.destination;
 
-import io.github.bytelab.wormholes.WormholeManager;
+import io.github.bytelab.wormholes.Main;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
@@ -29,12 +29,16 @@ import java.util.UUID;
 
 public class WormholeDestination implements NamedDestination {
 
-    private UUID uuid = UUID.randomUUID();
-    private UUID wormholeUuid;
-    private Random random = new Random();
+    private final UUID wormholeUuid;
+
+    private final Random random = new Random();
+
+    private UUID uuid;
+
+    private int nameid = DestinationContainer.nextAnonymousId++;
 
     public WormholeDestination(UUID wormholeUuid) {
-        this.wormholeUuid = wormholeUuid;
+        this(wormholeUuid, UUID.randomUUID());
     }
 
     public WormholeDestination(UUID wormholeUuid, UUID uuid) {
@@ -44,36 +48,91 @@ public class WormholeDestination implements NamedDestination {
 
     @Override
     public String getPrefix() {
+
         return "wormhole";
     }
 
     @Override
     public String getName() {
-        return WormholeManager.getInstance().get(wormholeUuid).getName();
+
+        try {
+            return Main.getInstance().getWormholes().get(wormholeUuid).getName();
+        } catch (NullPointerException e) {
+            return "" + nameid;
+        }
+    }
+
+    @Override
+    public void setName(String name) {
+
+        try {
+            Main.getInstance().getWormholes().get(wormholeUuid).setName(name);
+        } catch (NullPointerException ignored) {}
     }
 
     @Override
     public Vector getPosition(Entity entity) {
-        Vector position = WormholeManager.getInstance().get(wormholeUuid).getPosition();
 
-        position.setX((position.getX() + random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1));
-        position.setY((position.getY() + random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1));
-        position.setZ((position.getZ() + random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1));
+        try {
+            Vector position = Main.getInstance().getWormholes().get(wormholeUuid).getPosition();
 
-        return WormholeManager.getInstance().get(wormholeUuid).getPosition();
+            position.setX((position.getX() + (random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1)));
+            position.setY((position.getY() + (random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1)));
+            position.setZ((position.getZ() + (random.nextInt(6) + 2) * (random.nextBoolean() ? 1 : - 1)));
+
+            System.out.println(position);
+
+            return Main.getInstance().getWormholes().get(wormholeUuid).getPosition();
+        } catch (NullPointerException e) {
+            Main.getInstance().getDestinations().removeElement(this);
+
+            System.out.println("Using entity position.");
+
+            return entity.getLocation().toVector();
+        }
     }
 
     @Override
     public World getWorld(Entity entity) {
-        return WormholeManager.getInstance().get(wormholeUuid).getWorld();
+
+        try {
+            return Main.getInstance().getWormholes().get(wormholeUuid).getWorld();
+        } catch (NullPointerException e) {
+            return entity.getWorld();
+        }
     }
 
     @Override
     public UUID getUuid() {
+
         return uuid;
     }
 
+    @Override
+    public Destination getValue() {
+
+        return this;
+    }
+
     public UUID getWormholeUuid() {
+
         return wormholeUuid;
+    }
+
+    @Override
+    public String toString() {
+
+        return "WormholeDestination{" +
+          "nameid=" + nameid +
+          ", wormholeUuid=" + wormholeUuid +
+          ", random=" + random +
+          ", uuid=" + uuid +
+          '}';
+    }
+
+    @Override
+    public String getType() {
+
+        return "type";
     }
 }

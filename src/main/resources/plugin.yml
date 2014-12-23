@@ -1,10 +1,15 @@
 main: io.github.bytelab.wormholes.Main
 version: 1.0
 name: Wormholes
-description: >
-             Plugin for a fancier form of teleportation!
+description: "Plugin for a fancier form of teleportation!"
+
 commands:
-  wh:
-    description: Base command for Wormholes
-  wormhole:
-    description: Base command for Wormholes
+  wormholes:
+    description: "Base command for Wormholes"
+    usage: "/<command> <subcommand> Example: /<command> help"
+    aliases: [wh]
+
+permissions:
+  wormholes.*:
+    default: op
+    description: "Give players with op everything by default"

@@ -17,10 +17,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.bytelab.wormholes.exception;
+package me.tbotv63.core.util.container.directaccess;
 
-public class NoSuchTypeException extends RuntimeException {
+import me.tbotv63.core.util.container.Container;
+import me.tbotv63.core.util.container.Element;
 
-    private static final long serialVersionUID = 1;
+public interface DAContainer<T> extends Container<T> {
 
+    boolean putElement(Element<T> element);
+
+    boolean removeElement(Element<T> element);
+
+    boolean containsElement(Element<T> element);
 }

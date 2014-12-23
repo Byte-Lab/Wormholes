@@ -17,10 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.bytelab.wormholes.exception;
+package io.github.bytelab.wormholes.destination.retrievers;
 
-public class NoSuchTypeException extends RuntimeException {
+import io.github.bytelab.wormholes.Main;
+import io.github.bytelab.wormholes.destination.NamedDestination;
+import io.github.bytelab.wormholes.destination.WormholeDestination;
 
-    private static final long serialVersionUID = 1;
+public class WormholeRetriever implements Retriever {
 
+    @Override
+    public NamedDestination get(String prefix, String name) {
+
+        System.out.println("Searching for " + prefix + ":" + name);
+
+        if (Main.getInstance().getWormholes().get(prefix, name) == null) {
+            return null;
+        }
+
+        return new WormholeDestination(Main.getInstance().getWormholes().get(prefix, name).getUuid());
+    }
 }

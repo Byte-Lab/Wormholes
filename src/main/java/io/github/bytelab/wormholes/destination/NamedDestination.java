@@ -19,21 +19,37 @@
  */
 package io.github.bytelab.wormholes.destination;
 
+import me.tbotv63.core.util.container.NamedElement;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
+
+import java.util.UUID;
+
 /**
  * A destination that has a name and can be accessed by the destination:name syntax
  */
-public interface NamedDestination extends Destination {
+public interface NamedDestination extends Destination, NamedElement<Destination> {
 
     /**
-     *
      * @return the destinations name prefix
      */
     public String getPrefix();
 
     /**
-     *
      * @return the destinations name
      */
     public String getName();
 
+    @Override
+    void setName(String name);
+
+    @Override
+    Vector getPosition(Entity entity);
+
+    @Override
+    World getWorld(Entity entity);
+
+    @Override
+    UUID getUuid();
 }

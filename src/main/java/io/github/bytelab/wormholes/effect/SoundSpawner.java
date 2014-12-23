@@ -22,19 +22,32 @@ package io.github.bytelab.wormholes.effect;
 import io.github.bytelab.wormholes.Config;
 import io.github.bytelab.wormholes.Wormhole;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
-public class SoundGenerator {
+public class SoundSpawner {
 
     public static void idleWormhole(Wormhole wormhole) {
 
         if (Config.playSounds) {
             Sound sound;
 
-            if (Config.soundType.equals("vacuum")) { sound = Sound.ZOMBIE_UNFECT; }
-            else if (Config.soundType.equals("vacuum2")) {sound = Sound.BLAZE_BREATH;}
-            else if (Config.soundType.equals("wind")) {sound = Sound.AMBIENCE_THUNDER;}
-            else if (Config.soundType.equals("ominous")) {sound = Sound.AMBIENCE_CAVE;}
-            else { sound = Sound.ZOMBIE_UNFECT; }
+            switch (Config.soundType) {
+                case "vacuum":
+                    sound = Sound.ZOMBIE_UNFECT;
+                    break;
+                case "vacuum2":
+                    sound = Sound.BLAZE_BREATH;
+                    break;
+                case "wind":
+                    sound = Sound.AMBIENCE_THUNDER;
+                    break;
+                case "ominous":
+                    sound = Sound.AMBIENCE_CAVE;
+                    break;
+                default:
+                    sound = Sound.ZOMBIE_UNFECT;
+                    break;
+            }
 
             wormhole.getWorld().playSound(
               wormhole.getPosition()
@@ -43,11 +56,9 @@ public class SoundGenerator {
         }
     }
 
-    public static void enterWormhole(Wormhole wormhole) {
-        wormhole.getWorld().playSound(
-          wormhole.getPosition()
-            .toLocation(wormhole.getWorld()), Sound.ENDERMAN_TELEPORT, 2, 2
-        );
+    public static void enterWormhole(Player player) {
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 2, 2);
     }
 
 }

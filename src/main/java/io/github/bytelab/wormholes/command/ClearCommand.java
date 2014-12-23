@@ -17,10 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.bytelab.wormholes.exception;
+package io.github.bytelab.wormholes.command;
 
-public class NoSuchTypeException extends RuntimeException {
+import io.github.bytelab.wormholes.exception.InsufficientPermissionException;
+import me.tbotv63.core.util.command.BaseCommand;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
-    private static final long serialVersionUID = 1;
+public class ClearCommand extends BaseCommand {
 
+    @Override
+    public boolean execute(CommandSender commandSender, Command command, String s, String[] args) throws InsufficientPermissionException {
+
+        return false;
+    }
 }

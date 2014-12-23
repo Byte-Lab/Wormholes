@@ -27,36 +27,52 @@
  */
 package io.github.bytelab.wormholes;
 
-import io.github.bytelab.wormholes.destination.DestinationManager;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
+import io.github.bytelab.wormholes.command.*;
+import io.github.bytelab.wormholes.destination.DestinationContainer;
+import io.github.bytelab.wormholes.destination.retrievers.WormholeRetriever;
+import io.github.bytelab.wormholes.handler.PlayerMoveHandler;
+import me.tbotv63.core.util.command.CExecutor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
-
-    PluginDescriptionFile descriptionFile = this.getDescription();
-
-    Logger logger = Logger.getLogger("Wormholes");
-    FileConfiguration database;
-    File databaseFile;
-
     private static Main instance;
 
+    private final File databaseFile = new File(getDataFolder(), "wormholes.yml");
+
+    private final DestinationContainer destinationContainer = new DestinationContainer();
+
+    private final WormholeContainer wormholeContainer = new WormholeContainer();
+
     public static Main getInstance() {
+
         return instance;
+    }
+
+    public WormholeContainer getWormholes() {
+
+        return wormholeContainer;
+    }
+
+    public DestinationContainer getDestinations() {
+
+        return destinationContainer;
+    }
+
+    public void onDisable() {
+
+        saveDatabase();
+
+        destinationContainer.clear();
+        wormholeContainer.clear();
+
+        getLogger().info(getDescription().getName() + " version " + getDescription().getVersion() + " has been disabled!");
     }
 
     public void onEnable() {
@@ -65,113 +81,68 @@ public class Main extends JavaPlugin {
 
         Config.pluginConfiguration();
 
-        WormholeManager.getInstance().init();
+        getCommand("wormholes").setExecutor(
+          new CExecutor(
+            new HelpCommand(),
+            new CreateADCommand(),
+            new CreateAWDCommand(),
+            new CreateNDCommand(),
+            new DeleteCommand(),
+            new RenameCommand(),
+            new ReloadCommand(),
+            new ListCommand(),
+            new ListPCommand()
+          )
+        );
 
-        getCommand("wh").setExecutor(new WormholeCommand());
-        getCommand("wormhole").setExecutor(new WormholeCommand());
+        destinationContainer.addRetriever(new WormholeRetriever());
+
+        wormholeContainer.init();
+        TeleportManager.getInstance().init();
+
+        getServer().getPluginManager().registerEvents(new PlayerMoveHandler(), this);
 
         loadDatabase();
 
 
-        logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been enabled!");
+        getLogger().info(getDescription().getName() + " version " + getDescription().getVersion() + " has been enabled!");
 
     }
 
-    public void onDisable() {
+    void loadDatabase() {
 
-        saveDatabase();
+        FileConfiguration database = new YamlConfiguration();
 
-        logger.info(descriptionFile.getName() + " version " + descriptionFile.getVersion() + " has been disabled!");
-    }
-
-    public void saveDatabase() {
-
-        databaseFile = new File(getDataFolder(), "wormholes.yml");
-        database = new YamlConfiguration();
-
-        DestinationManager.getInstance().putDestinations(database.createSection("destinations"));
-
-        //Save wormholes.
-        ConfigurationSection whSection = database.createSection("wormholes");
-
-        for (Wormhole wormhole : WormholeManager.getInstance()) {
-
-            ConfigurationSection section;
-            if(whSection.getConfigurationSection(wormhole.getWorld().getUID().toString()) == null) {
-                section = whSection
-                  .createSection(wormhole.getWorld().getUID().toString())
-                  .createSection(wormhole.getName());
-            } else {
-                section = whSection
-                  .getConfigurationSection(wormhole.getWorld().getUID().toString())
-                  .createSection(wormhole.getName());
-            }
-
-            ConfigurationSection locationSection = section.createSection("location");
-
-            locationSection.set("posX", wormhole.getPosition().getX());
-            locationSection.set("posY", wormhole.getPosition().getY());
-            locationSection.set("posZ", wormhole.getPosition().getZ());
-            section.set("destination", wormhole.getDestination().getUuid().toString());
-            section.set("uuid", wormhole.getUuid().toString());
-        }
-
-        try {
-            database.save(databaseFile);
-        } catch (IOException e) {
-            logger.warning("Failed to save database.");
-            e.printStackTrace();
-        }
-    }
-
-    public void loadDatabase() {
-        databaseFile = new File(getDataFolder(), "wormholes.yml");
-        database = new YamlConfiguration();
-
-        if(!databaseFile.exists()) {
-            database.createSection("wormholes");
+        if (! databaseFile.exists()) {
             saveDatabase();
         }
 
         try {
+
             database.load(databaseFile);
-        } catch (IOException e) {
-            logger.warning("Failed to load database.");
+
+            destinationContainer.load(database.getConfigurationSection("destinations"));
+            wormholeContainer.load(database.getConfigurationSection("wormholes"));
+
+        } catch (IOException | InvalidConfigurationException | NullPointerException e) {
+            getLogger().warning("Your database file can't be read or is corrupt. Delete it and restart the server.");
             e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
-            logger.warning("Database file is corrupt.");
-            logger.warning("Failed to load config.");
-            e.printStackTrace();
+            getPluginLoader().disablePlugin(this);
         }
+    }
 
-        DestinationManager.getInstance().getDestinations(database.getConfigurationSection("destinations"));
+    void saveDatabase() {
 
-        for(World world : Bukkit.getWorlds()) {
-            ConfigurationSection whSection = database.getConfigurationSection("wormholes").getConfigurationSection(world.getUID().toString());
-            if(whSection == null) continue;
+        FileConfiguration database = new YamlConfiguration();
 
-            Set<String> wormholes = whSection.getKeys(false);
+        destinationContainer.save(database.createSection("destinations"));
+        wormholeContainer.save(database.createSection("wormholes"));
 
-            for(String name : wormholes) {
-                ConfigurationSection section = whSection.getConfigurationSection(name);
-                ConfigurationSection locationSection = section.getConfigurationSection("location");
-
-                WormholeManager.getInstance().add(
-                  new Wormhole(
-                    new Vector(
-                      locationSection.getDouble("posX"),
-                      locationSection.getDouble("posY"),
-                      locationSection.getDouble("posZ")
-                    ),
-                    world,
-                    name,
-                    DestinationManager.getInstance().get(UUID.fromString(section.getString("destination"))),
-                    UUID.fromString(section.getString("uuid"))
-                  )
-                );
-
-                System.out.println(DestinationManager.getInstance().get(UUID.fromString(section.getString("destination"))));
-            }
+        try {
+            database.save(databaseFile);
+        } catch (IOException e) {
+            getLogger().warning("Failed to save database.");
+            e.printStackTrace();
         }
     }
 }

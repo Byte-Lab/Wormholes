@@ -23,9 +23,10 @@ import io.github.bytelab.wormholes.Config;
 import io.github.bytelab.wormholes.Wormhole;
 import io.github.bytelab.wormholes.particle.ParticleEffect;
 
-public class ParticleGenerator {
+public class ParticleSpawner {
 
     public static void idleWormhole(Wormhole wormhole) {
+
         ParticleEffect.RED_DUST.display(
           0.5F, 0.5F, 0.5F, Config.useColors ? 0.1F : 0.00001F, 100, wormhole.getPosition()
             .toLocation(wormhole.getWorld(), 0, 0), 100D
@@ -41,6 +42,7 @@ public class ParticleGenerator {
     }
 
     public static void enterWormhole(Wormhole wormhole) {
+
         ParticleEffect.WITCH_MAGIC.display(
           0F, 0F, 0F, 1F, 40, wormhole.getPosition()
             .toLocation(wormhole.getWorld(), 0, 0), 2D

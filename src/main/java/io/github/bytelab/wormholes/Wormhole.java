@@ -20,88 +20,147 @@
 package io.github.bytelab.wormholes;
 
 import io.github.bytelab.wormholes.destination.Destination;
-import io.github.bytelab.wormholes.effect.ParticleGenerator;
-import io.github.bytelab.wormholes.effect.SoundGenerator;
+import io.github.bytelab.wormholes.effect.ParticleSpawner;
+import io.github.bytelab.wormholes.effect.SoundSpawner;
+import io.github.bytelab.wormholes.exception.NullDerpException;
+import me.tbotv63.core.util.container.NamedElement;
+import me.tbotv63.core.util.math.geo.Cuboid;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
-public class Wormhole implements Destination {
+public class Wormhole implements NamedElement<Wormhole> {
 
     private final UUID uuid;
+
     private Vector position;
+
     private World world;
+
     private String name;
+
+    private Cuboid teleportArea;
 
     private Destination destination;
 
     public Wormhole(Vector position, World world, String name, Destination destination) {
-        this.position = position;
-        this.world = world;
-        this.name = name;
-        this.destination = destination;
-        this.uuid = UUID.randomUUID();
+        this(position, world, name, destination, UUID.randomUUID());
     }
 
     public Wormhole(Vector position, World world, String name, Destination destination, UUID uuid) {
+
+        if (destination == null) { throw new NullDerpException(); }
+
         this.position = position;
         this.world = world;
         this.name = name;
         this.destination = destination;
         this.uuid = uuid;
+
+        this.teleportArea = new Cuboid(
+          new Vector(
+            position.getX() - Config.suckRadius - 1.0D,
+            position.getY() - Config.suckRadius - 1.0D,
+            position.getZ() - Config.suckRadius - 1.0D
+          ),
+          new Vector(
+            position.getX() + Config.suckRadius - 1.0D,
+            position.getY() + Config.suckRadius - 1.0D,
+            position.getZ() + Config.suckRadius - 1.0D
+          )
+        );
     }
 
     public Vector getPosition() {
+
         return position;
     }
 
     public void setPosition(Vector position) {
+
         this.position = position;
     }
 
     public World getWorld() {
+
         return world;
     }
 
     public void setWorld(World world) {
+
         this.world = world;
     }
 
+    @Override
+    public String getPrefix() {
+
+        return "wormhole";
+    }
+
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public Destination getDestination() {
+
         return destination;
     }
 
     public void setDestination(Destination destination) {
+
         this.destination = destination;
     }
 
-    @Override
     public Vector getPosition(Entity entity) {
+
         return position;
     }
 
-    @Override
     public World getWorld(Entity entity) {
+
         return world;
     }
 
     public UUID getUuid() {
+
         return uuid;
     }
 
-    public void updateInWorld() {
-        ParticleGenerator.idleWormhole(this);
-        SoundGenerator.idleWormhole(this);
+    @Override
+    public Wormhole getValue() {
+
+        return this;
     }
 
+    public void updateInWorld() {
+
+        ParticleSpawner.idleWormhole(this);
+        SoundSpawner.idleWormhole(this);
+    }
+
+    public Cuboid getTeleportArea() {
+
+        return this.teleportArea;
+    }
+
+    @Override
+    public String toString() {
+
+        return "Wormhole{" +
+          "destination=" + destination +
+          ", uuid=" + uuid +
+          ", position=" + position +
+          ", world=" + world +
+          ", name='" + name + '\'' +
+          ", teleportArea=" + teleportArea +
+          '}';
+    }
 }

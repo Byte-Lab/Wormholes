@@ -1,0 +1,62 @@
+#
+# Copyright (c) 2014-2014
+# Byte-Lab <http://bytelab.pw>
+#
+# This file is part of Wormholes.
+#
+# Wormholes is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+message.error.permission=&bYou don't have permission to use that command!
+message.error.console=&bThat command may not be sent from the console!
+message.error.numeric=&bInvalid Arguments: &c{0} &bmust be numeric!
+message.error.notimplemented=&bThis command is WIP implemented!
+
+message.usage=Correct usage:
+
+message.create.usage.0=&a/&bwh create &a<&bname&a> <&bx&a> <&by☻a&a> <&bz&a> [&bworld&a]
+message.create.usage.1=&a/&bwh create &a<&bname&a> <&bdestination&a>
+message.create.success=Wormhole successfully created!
+
+message.rename.usage.0=&a/&bwh rename &a<&boldname&a> <&bnewname&a>
+message.rename.success=&bWormhole successfully renamed!
+
+message.delete.usage.0=&a/&bwh delete &a<&bname&a>
+message.delete.success=&bWormhole successfully deleted!
+
+message.bacon=Bacon.
+
+message.destination.exists=&bDestination already exists.
+message.destination.missing=&bDestination doesn't exist!
+
+message.name.invalid.0=&bMalformed name supplied: &c{0}.
+message.name.invalid.1=&bNames must be in the format &c<prefix>:<name>
+
+message.world.missing=&bThe given world &c{0} &bdoesn't exist.
+
+message.wormhole.missing=&bThe given wormhole &c{0} &bdoesn't exist.
+message.wormhole.exists=&bThe given name &c{0} &bis already in use.
+
+message.reload.success=&bReload successful.
+
+message.help.main.0=&a/&bwh create &a<&bname&a> <&bx&a> <&by&a> <&bz&a> [&bworld&a] - &bCreate a Wormhole to the given Coordinate
+message.help.main.1=&a/&bwh create &a<&bname&a> <&bdestination&a> - &bCreate a Wormhole to the given Destination
+message.help.main.2=&a/&bwh rename &a<&boldname&a> <&bnewname&a> - &bRename a Wormhole
+message.help.main.3=&a/&bwh delete &a<&bname&a> - &bDelete the given Wormhole
+message.help.main.4=&a/&bwh reload &a- &bReload configs and database
+message.help.main.5=&a/&bwh list &a- &bList all current Wormholes
+message.help.main.6=&a/&bwh help &a- &bShow this sloppy wall of text that is supposed to help you.
+
+message.list.heading=&bWormhole List &a(&bPage &c{0}&a)
+message.list.entry=&c{0} &a(&bdest&a: &c{1}&a)

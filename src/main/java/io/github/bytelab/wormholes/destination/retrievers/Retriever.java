@@ -17,10 +17,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.bytelab.wormholes.exception;
+package io.github.bytelab.wormholes.destination.retrievers;
 
-public class NoSuchTypeException extends RuntimeException {
+import io.github.bytelab.wormholes.destination.NamedDestination;
 
-    private static final long serialVersionUID = 1;
+public interface Retriever {
+
+    NamedDestination get(String prefix, String name);
 
 }

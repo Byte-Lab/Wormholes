@@ -26,6 +26,12 @@ import java.util.UUID;
 
 public class CoordinateDestination extends FixedDestination implements NamedDestination {
 
+    @Override
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
     private String name;
 
     public CoordinateDestination(Vector position, World world, String name, UUID uuid) {
@@ -40,11 +46,19 @@ public class CoordinateDestination extends FixedDestination implements NamedDest
 
     @Override
     public String getPrefix() {
+
         return "coordinate";
     }
 
     @Override
     public String getName() {
+
         return name;
+    }
+
+    @Override
+    public String getType() {
+
+        return "coordinate";
     }
 }

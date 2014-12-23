@@ -17,34 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.bytelab.wormholes.util;
+package io.github.bytelab.wormholes.exception;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+public class NullDerpException extends RuntimeException {
 
-public class CombinedIterator<T> implements Iterator<T> {
+    private static final long serialVersionUID = 1;
 
-    List<Iterator<? extends T>> iterators;
-
-    public CombinedIterator(List<Iterator<? extends T>> iterators) {
-        this.iterators = iterators;
-    }
-
-    @Override
-    public boolean hasNext() {
-        for (Iterator<? extends T> iterator : iterators) {
-            if (iterator.hasNext()) return true;
-        }
-        return false;
-    }
-
-    @Override
-    public T next() {
-        for (Iterator<? extends T> iterator : iterators) {
-            if (iterator.hasNext()) return iterator.next();
-        }
-
-        throw new NoSuchElementException();
-    }
 }
