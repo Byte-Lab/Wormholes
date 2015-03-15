@@ -105,7 +105,7 @@ public class DestinationContainer extends MixedContainerImpl<Destination, Destin
             return;
         }
 
-        throw new UnknownTypeException(destination.getClass().toGenericString());
+        throw new UnknownTypeException(destination.getClass().toString());
     }
 
     private void saveFixedDestination(ConfigurationSection section, FixedDestination destination) {
