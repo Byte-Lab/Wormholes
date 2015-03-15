@@ -115,6 +115,11 @@ public class NamedContainerImpl<T> implements NamedContainer<T> {
 
             return itemList.get(counter++).getValue();
         }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     @Override

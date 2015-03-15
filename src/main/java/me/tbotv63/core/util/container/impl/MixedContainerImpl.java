@@ -145,6 +145,11 @@ public class MixedContainerImpl<B, T extends B> implements MixedContainer<B, T> 
 
             return itemList.get(counter++).getValue();
         }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private class NamedElementImpl implements NamedElement<T> {

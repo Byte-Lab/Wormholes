@@ -132,6 +132,11 @@ public class ContainerImpl<T> implements Container<T> {
 
             return itemList.get(counter++).getValue();
         }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     private class ElementImpl implements Element<T> {
